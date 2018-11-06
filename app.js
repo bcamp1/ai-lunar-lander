@@ -7,7 +7,7 @@
 Math.seedrandom(0)
 
 let two = new Two({ fullscreen: true, autostart: true }).appendTo(document.body)
-let netInfo = new Two({ width: 1500, height: 1000, autostart: true }).appendTo(document.body)
+let info = new Two({ width: 1500, height: 1000, autostart: true }).appendTo(document.body)
 
 // resize the two canvas to allow events to flow to html header
 let svg = document.getElementsByTagName('svg')[0]

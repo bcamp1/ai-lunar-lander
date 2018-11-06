@@ -123,7 +123,7 @@ class Network {
             var g = 0
             var b = 0
             if (weight > 0) {
-              g = Math.floor(255 * weight)
+              b = Math.floor(255 * weight)
             } else {
               r = Math.floor(255 * -weight)
             }
@@ -146,11 +146,11 @@ class Network {
         var rect = two.makeCircle(x + scale * (circleRadius + xSpacing * i), y + scale * (circleRadius + centerOffset + ySpacing * j), scale * circleRadius)
         rect.linewidth = 1 * scale
         if (i === 0) {
-          rect.fill = 'rgb(33, 228, 29)'
+          rect.fill = 'white'
         } else if (i === this.nodes.length - 1) {
-          rect.fill = 'orange'
+          rect.fill = 'white'
         } else {
-          rect.fill = 'skyblue'
+          rect.fill = 'white'
         }
       }
     }
