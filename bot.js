@@ -31,7 +31,8 @@ class Bot {
 
   turn (dir) {
     if (dir === Direction.LEFT) {
-      ships[this.id].av -= 0.0001 } else if (dir === Direction.RIGHT) {
+      ships[this.id].av -= 0.0001
+    } else if (dir === Direction.RIGHT) {
       ships[this.id].av += 0.0001
     }
   }
@@ -242,8 +243,7 @@ function isBelowGround (x, y) {
   return below
 }
 
-
-function compareFitness(bot1, bot2) {
+function compareFitness (bot1, bot2) {
   var fitness1 = bot1.fitness
   var fitness2 = bot2.fitness
 

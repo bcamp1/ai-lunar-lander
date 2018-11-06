@@ -26,16 +26,16 @@ function reset () {
   Math.seedrandom(0)
   two.clear()
   ground = new Terrain(two)
-  Math.seedrandom(`${(new Date()).getTime()}`);    
+  Math.seedrandom(`${(new Date()).getTime()}`)
 }
 
 function init () {
-  camera = new Camera(two);
-  camera.chase = {};
+  camera = new Camera(two)
+  camera.chase = {}
   Math.seedrandom(0)
   two.clear()
   ground = new Terrain(two)
-  Math.seedrandom(`${(new Date()).getTime()}`);    
+  Math.seedrandom(`${(new Date()).getTime()}`)
 }
 
 // used for debug

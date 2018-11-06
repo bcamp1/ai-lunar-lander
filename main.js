@@ -1,6 +1,10 @@
+/* eslint no-undef: 0 */
+/* eslint no-redeclare: 0 */
+/* eslint no-unused-vars: 0 */
+
 class Generation {
-  constructor (numBots, batchNum) { 
-    this.target = ground.padInfoNearest({x: 5000, y: 0}).center
+  constructor (numBots, batchNum) {
+    this.target = ground.padInfoNearest({ x: 5000, y: 0 }).center
     this.bots = []
     this.numBots = numBots
     this.longestSurviving = []
@@ -8,7 +12,7 @@ class Generation {
     this.dead = false
     this.mostFit = 0
     this.mostFitIndex = -1
-  
+
     // Batches
     this.currentBatch = 0
     this.batchNum = batchNum
@@ -35,10 +39,10 @@ class Generation {
       var whichNet = mostFit[i % numTop].net
       this.bots[i].net = copyNetwork(whichNet)
       this.bots[i].net.mutate(mutateNum)
-    }  
+    }
   }
 
-  executeNets(isRendered) {
+  executeNets (isRendered) {
     if (!this.dead) {
       for (var i = this.batchStartingBot; i < this.batchEndingBot; i++) {
         console.log(this.batchEndingBot)
@@ -56,10 +60,10 @@ class Generation {
             this.mostFitIndex = i
           }
           console.log(`dead: ${this.numDeadInBatch} numBatch: ${this.batchNum}, batchEndingBot: ${this.batchEndingBot}`)
-          if (this.numDeadInBatch == this.batchNum) {
+          if (this.numDeadInBatch === this.batchNum) {
             this.currentBatch += 1
             this.numDeadInBatch = 0
-            console.log("New Batch")
+            console.log('New Batch')
             this.batchStartingBot = this.batchEndingBot
             if (this.batchEndingBot === this.bots.length) {
               console.log(`${this.batchStartingBot} = ${this.bots.length}`)
@@ -84,7 +88,6 @@ class Generation {
         }
       }
     }
-    
   }
 
   destroy () {
@@ -126,15 +129,15 @@ function iteration () {
     var mostFitBots = currentGeneration.mostFitBots
     var averageFitness = 0
     for (var i = 0; i < mostFitBots.length; i++) {
-      averageFitness += mostFitBots[i].fitness 
+      averageFitness += mostFitBots[i].fitness
     }
     averageFitness = averageFitness / mostFitBots.length
     currentGeneration.destroy()
     currentGeneration = new Generation(numBots, batchSize)
     currentGeneration.copyAndMutateNets(mostFitBots, 20, 10)
     currentGeneration.displayNet(0)
-    var generationText = netInfo.makeText(`Generation: ${generation}`, 10, 160, {alignment: left})
-    var totalFitnessText = netInfo.makeText(`Average Fitness: ${averageFitness}`, 10, 180, {alignment: left})
+    var generationText = netInfo.makeText(`Generation: ${generation}`, 10, 160, { alignment: left })
+    var totalFitnessText = netInfo.makeText(`Average Fitness: ${averageFitness}`, 10, 180, { alignment: left })
     generationText.fill = 'white'
     totalFitnessText.fill = 'white'
     generation += 1
@@ -180,5 +183,4 @@ function panCamera () {
   if (s) {
     two.scene.translation.y -= 20 * two.scene.scale
   }
-
 }

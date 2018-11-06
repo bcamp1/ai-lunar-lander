@@ -194,7 +194,7 @@ class Network {
   }
 }
 
-function copyNetwork(net) {
+function copyNetwork (net) {
   var newNet = new Network(net.layerLengths)
   // Nodes: [layer][index]
   // Weights: [startLayer][startNodeIndex][endNodeIndex]
@@ -205,15 +205,15 @@ function copyNetwork(net) {
   for (var i = 0; i < net.nodes.length; i++) {
     for (var j = 0; j < net.nodes[i].length; j++) {
       newNet.nodes[i][j] = net.nodes[i][j]
-    } 
+    }
   }
 
   for (var i = 0; i < net.weights.length; i++) {
-    for (var j = 0; j < net.weights[i].length; j++) { 
+    for (var j = 0; j < net.weights[i].length; j++) {
       for (var k = 0; k < net.weights[i][j].length; k++) {
         newNet.weights[i][j][k] = net.weights[i][j][k]
-      } 
-    } 
+      }
+    }
   }
   return newNet
 }
