@@ -7,18 +7,24 @@ var up, right, left, down, a, d, w, s
 
 class Bot {
   constructor () {
-    this.id = ships.length
-    ships.push(new Ship(two, 50, ground.minY - 100, 0.5, -0.1, -Math.PI / 2))
     this.net = new Network([6, 5, 3])
     this.fitness = 0
-    // this.net.display()
     this.dead = false
-
     this.sensorLength = 200
+    this.color = {
+      r: randInt(0, 255),
+      g: randInt(0, 255),
+      b: randInt(0, 255)
+    }
+  }
 
+  createShip () {
+    this.id = ships.length
+    ships.push(new Ship(two, 50, ground.minY - 100, 0.5, -0.1, -Math.PI / 2))
     this.sensorLeft = new Sensor(this.id, -Math.PI / 6, this.sensorLength)
     this.sensorMiddle = new Sensor(this.id, 0, this.sensorLength)
     this.sensorRight = new Sensor(this.id, Math.PI / 6, this.sensorLength)
+    ships[this.id].circle.fill = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`
   }
 
   set engine (isOn) {
@@ -104,10 +110,12 @@ class Bot {
     return false
   }
 
-  render () {
-    this.sensorLeft.render()
-    this.sensorRight.render()
-    this.sensorMiddle.render()
+  render (showLines) {
+    if (showLines) {
+      this.sensorLeft.render()
+      this.sensorRight.render()
+      this.sensorMiddle.render()
+    }
 
     this.sensorMiddle.sense()
     this.sensorLeft.sense()
@@ -142,7 +150,7 @@ class Sensor {
     Returns -1 if the entire line is above ground
   */
   sense () {
-    const step = 10
+    const step = 50
     var x = ships[this.botId].translation.x
     var y = ships[this.botId].translation.y
     var rotation = ships[this.botId].rotation

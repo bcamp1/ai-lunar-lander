@@ -14,8 +14,6 @@ let svg = document.getElementsByTagName('svg')[0]
 let header = document.querySelector('#header')
 svg.style.top = header.getBoundingClientRect().bottom
 
-const smallScale = 0.6; const tinyScale = 0.2; const largeScale = 2
-
 var ground, camera, state
 
 var ships = []
@@ -36,6 +34,9 @@ function init () {
   two.clear()
   ground = new Terrain(two)
   Math.seedrandom(`${(new Date()).getTime()}`)
+  two.scene.scale = 0.6
+  two.scene.translation.y = two.height - ground.maxY * 0.6
+  two.scene.translation.x = two.width * 0.6
 }
 
 // used for debug

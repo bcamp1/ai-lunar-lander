@@ -10,8 +10,8 @@ const roughness = 0.7 // decrease the deflection by this on each recursion
 class Terrain {
   constructor (two) {
     this.two = two
-    this.minX = -1 * two.width
-    this.maxX = 4 * two.width
+    this.minX = -2 * two.width
+    this.maxX = 2 * two.width
 
     this.minY = Number.MAX_VALUE
     this.maxY = -Number.MAX_VALUE
@@ -24,6 +24,11 @@ class Terrain {
     let array = [this.path, ...this.pads.map(pad => pad.group)]
 
     this.group = two.makeGroup(...array)
+
+    this.ceilingY = -1000
+    var ceil = two.makeLine(this.minX, this.ceilingY, this.maxX, this.ceilingY)
+    ceil.linewidth = 2
+    ceil.stroke = 'white'
 
     // draw some debug lines
     /*
