@@ -2,8 +2,11 @@
 /* eslint no-redeclare: 0 */
 /* eslint no-unused-vars: 0 */
 const physicsMult = 15
-const botsPerGeneration = 10
-const botsPerBatch = 5
+const botsPerGeneration = 500
+const botsPerBatch = 20
+const netsToKeep = 50
+const mutationStrength = 10
+const batchesNeeded = botsPerGeneration / botsPerBatch
 
 var bots = []
 
@@ -12,8 +15,11 @@ var batchEnd = botsPerBatch
 var batchNumDead = 0
 var batchNum = 0
 
+var totalFitness = 0
+var averageFitness = 0
+
 var generation = 0
-updateInfo()
+
 
 for (var i = 0; i < botsPerGeneration; i++) {
   bots.push(new Bot())
@@ -24,22 +30,28 @@ for (var i = batchStart; i < batchEnd; i++) {
   bots[i].createShip()
 }
 
+updateInfo(bots[0].net)
+
 function step () {
   for (var i = batchStart; i < batchEnd; i++) {
     var justDied = bots[i].executeNet()
-    bots[i].render(false)
+    bots[i].render(true)
 
     if (justDied) {
+      // Calculate Fitness
+      bots[i].fitness = 1 / ((bots[i].vx * bots[i].vx) + (bots[i].vy * bots[i].vy))
       batchNumDead += 1
       if (batchNumDead === botsPerBatch) {
+        reset()
         batchNumDead = 0
         batchStart = batchEnd
         batchNum += 1
         batchEnd += botsPerBatch
-        if (batchEnd > bots.length) {
-          batchEnd = bots.length
+        if (batchEnd > (bots.length)) {
+          batchEnd = (bots.length)
         }
 
+        ships = []
         // Initialize new batch
         for (var i = batchStart; i < batchEnd; i++) {
           bots[i].createShip()
@@ -49,8 +61,44 @@ function step () {
           // Generation Finished
           generation += 1
           batchNum = 0
+          batchStart = 0
+          batchEnd = botsPerBatch
+
+          // Sort Bots by fitness
+          totalFitness = 0
+          for (var i = 0; i < botsPerGeneration; i++) {
+            totalFitness += fitnessSquish(bots[i].fitness)
+          }
+          averageFitness = totalFitness / botsPerGeneration
+          bots.sort(compareFitness)
+          var bestNets = []
+          for (var i = 0; i < netsToKeep; i++) {
+            bestNets.push(copyNetwork(bots[i].net))
+          }
+
+          console.log(bestNets)
+
+          // Start a new generation
+          bots = []
+          ships = []
+
+          console.log(`Batch Start: ${batchStart}, Batch End: ${batchEnd}`)
+
+          for (var i = 0; i < botsPerGeneration; i++) {
+            bots.push(new Bot())
+            let whichNetIndex = i % netsToKeep
+            bots[i].net = copyNetwork(bestNets[whichNetIndex])
+            if (i > (netsToKeep - 1)) {
+              bots[i].net.mutate(mutationStrength)
+            }
+          }
+
+          for (var i = batchStart; i < batchEnd; i++) {
+            bots[i].createShip()
+            console.log(bots[i].net)
+          }
         }
-        updateInfo()
+        updateInfo(bots[batchStart].net)
       }
     }
   }
@@ -84,12 +132,15 @@ window.addEventListener('wheel', event => {
   two.scene.translation.x = (two.width + offsetX) * scale
 })
 
-function updateInfo () {
+function updateInfo (net) {
   info.clear()
-  var generationText = info.makeText(`Generation: ${generation}`, 16, 20, { alignment: 'left' })
-  var batchText = info.makeText(`Batch: ${batchNum}`, 16, 40, { alignment: 'left' })
+  net.display(info, 5, 5, 0.5)
+  var generationText = info.makeText(`Generation: ${generation}`, 16, 200, { alignment: 'left' })
+  var batchText = info.makeText(`Batch: ${batchNum} / ${batchesNeeded}`, 16, 220, { alignment: 'left' })
+  var avgFitnessText = info.makeText(`Average Fitness: ${averageFitness}`, 16, 240, { alignment: 'left' })
   generationText.fill = 'white'
   batchText.fill = 'white'
+  avgFitnessText.fill = 'white'
 }
 
 function panCamera () {
@@ -112,4 +163,8 @@ function panCamera () {
     two.scene.translation.y -= 20 * two.scene.scale
     offsetY -= 20 * two.scene.scale
   }
+}
+
+function fitnessSquish (x) {
+  return 1000 / (1 + Math.pow(Math.E, -1 * (x - 8)))
 }

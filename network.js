@@ -216,4 +216,6 @@ function copyNetwork (net) {
     }
   }
   return newNet
+
+  // return JSON.parse(JSON.stringify(net))
 }

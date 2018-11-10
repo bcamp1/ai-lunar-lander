@@ -262,3 +262,9 @@ function compareFitness (bot1, bot2) {
   }
   return 0
 }
+
+function addFitness (bot1, bot2) {
+  var fitness1 = bot1.fitness
+  var fitness2 = bot2.fitness
+  return fitness1 + fitness2
+}
