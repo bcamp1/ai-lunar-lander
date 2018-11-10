@@ -4,7 +4,7 @@
 const physicsMult = 15
 const botsPerGeneration = 20
 const botsPerBatch = 10
-const netsToKeep = 500
+const netsToKeep = 5
 const mutationStrength = 10
 const batchesNeeded = botsPerGeneration / botsPerBatch
 
@@ -77,8 +77,14 @@ function step () {
           averageFitness = totalFitness / botsPerGeneration
           bots.sort(compareFitness)
           var bestNets = []
+          var bestColors = []
           for (var i = 0; i < netsToKeep; i++) {
             bestNets.push(copyNetwork(bots[i].net))
+            bestColors.push({
+              r: bots[i].color.r,
+              g: bots[i].color.g,
+              b: bots[i].color.b
+            })
           }
 
           console.log(bestNets)
@@ -93,6 +99,11 @@ function step () {
             bots.push(new Bot())
             let whichNetIndex = i % netsToKeep
             bots[i].net = copyNetwork(bestNets[whichNetIndex])
+            bots[i].color = {
+              r: bestColors[whichNetIndex].r,
+              g: bestColors[whichNetIndex].g,
+              b: bestColors[whichNetIndex].b
+            }
             if (i > (netsToKeep - 1)) {
               bots[i].net.mutate(mutationStrength)
             }
