@@ -2,11 +2,16 @@
 /* eslint no-redeclare: 0 */
 /* eslint no-unused-vars: 0 */
 const physicsMult = 15
-const botsPerGeneration = 500
-const botsPerBatch = 20
-const netsToKeep = 50
+const botsPerGeneration = 20
+const botsPerBatch = 10
+const netsToKeep = 500
 const mutationStrength = 10
 const batchesNeeded = botsPerGeneration / botsPerBatch
+
+// Check for variable 'Compile Time' errors
+if (netsToKeep > botsPerBatch) {
+  throw new Error('netsToKeep must be less than botsPerGeneration')
+}
 
 var bots = []
 
